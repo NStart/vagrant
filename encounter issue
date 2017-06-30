@@ -1,0 +1,9 @@
+#遇到的坑：
+一开始安装了非最新的ubuntu  box 10.0版本，导致source源不完成没办法安装git vim，后面改成安装ubuntu14的box才正常
+
+安装lnmp几乎正常，就是无法启动nginx
+sudo service nginx restart始终没有nginx进程
+提示80端口被占用，ip访问时是跳到apache页面，可能是因为一开始默认安装了apache，于是把apache关掉了。后面还是提示端口占用，
+sudo lsof -i:80 查看端口占用   发现php占用，不太合理，重启vagrant ，重启nginx，php正常了。
+
+安装教程中mysql源一直报错，后面重新找了源。
