@@ -1,4 +1,4 @@
-# vagrant
+# vagrant build lnmp env
 
 reprint from
 https://github.com/astaxie/go-best-practice/blob/master/ebook/zh/01.2.md
