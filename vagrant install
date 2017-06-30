@@ -1,18 +1,32 @@
-#install vagrant
+1.2 Vagrant安装配置
+
+实际上Vagrant只是一个让你可以方便设置你想要的虚拟机的便携式工具，它底层支持VirtualBox、VMware甚至AWS作为虚拟机系统，本书中我们将使用VirtualBox来进行说明，所以第一步需要先安裝Vagrant和VirtualBox。
 
 VirtualBox安装
+
 VirtualBox是Oracle开源的虚拟化系统，它支持多个平台，所以你可以到官方网站：https://www.virtualbox.org/wiki/Downloads/ 下载适合你平台的VirtualBox最新版本并安装，它的安装过程都很傻瓜化，一步一步执行就可以完成安装了。
 
+Vagrant安装
+
+最新版本的Vagrant已经无法通过gem命令来安装，因为依赖库太多了，所以目前无法使用gem来安装，目前网络上面很多教程还是类似这样的命令，那些都是错误的。目前唯一安装的办法就是到官方网站下载打包好的安装包：http://www.vagrantup.com/downloads.html 他的安装过程和VirtualBox的安装一样都是傻瓜化安装，一步一步执行就可以完成安装。
+
+尽量下载最新的程序，因为VirtualBox经常升级，升级后有些接口会变化，老的Vagrant可能无法使用。
+要想检测安装是否成功，可以打开终端命令行工具，输入vagrant，看看程序是不是已经可以运行了。如果不行，请检查一下$PATH里面是否包含vagrant所在的路径。
+
+Vagrant配置
+
+当我们安装好VirtualBox和Vagrant后，我们要开始考虑在VM上使用什么操作系统了，一个打包好的操作系统在Vagrant中称为Box，即Box是一个打包好的操作系统环境，目前网络上什么都有，所以你不用自己去制作操作系统或者制作Box：vagrantbox.es上面有大家熟知的大多数操作系统，你只需要下载就可以了，下载主要是为了安装的时候快速，当然Vagrant也支持在线安装。
 
 建立开发环境目录
+
 我的开发机是Mac，所以我建立了如下的开发环境目录，读者可以根据自己的系统不同建立一个目录就可以：
+
 /Users/astaxie/vagrant
-
-
 下载box
-前面讲了box是一个操作系统环境，实际上它是一个zip包，包含了Vagrant的配置信息和VirtualBox的虚拟机镜像文件.我们这一次的实战使用官方提供了一个box:Ubuntu lucid 64 http://files.vagrantup.com/lucid64.box
-当然你也可以选一个自己团队在用的系统，例如CentOS、Debian等，我们可以通过上面说的地址下载开源爱好者们制作好的box。当然你自己做一个也行，下一节我会讲述如何自己制作包。
 
+前面讲了box是一个操作系统环境，实际上它是一个zip包，包含了Vagrant的配置信息和VirtualBox的虚拟机镜像文件.我们这一次的实战使用官方提供了一个box:Ubuntu lucid 64 http://files.vagrantup.com/lucid64.box
+
+当然你也可以选一个自己团队在用的系统，例如CentOS、Debian等，我们可以通过上面说的地址下载开源爱好者们制作好的box。当然你自己做一个也行，下一节我会讲述如何自己制作包。
 
 添加box
 
@@ -32,8 +46,14 @@ vagrant box add "CentOS 6.3 x86_64 minimal" CentOS-6.3-x86_64-minimal.box
 我在开发机上面是这样操作的，首先进入我们的开发环境目录/Users/astaxie/vagrant，执行如下的命令
 
 vagrant box add base lucid64.box
+安装过程的信息：
 
+Downloading or copying the box...
+Extracting box...te: 47.5M/s, Estimated time remaining: --:--:--)
+Successfully added box 'base' with provider 'virtualbox'!
+box中的镜像文件被放到了：/Users/astaxie/.vagrant.d/boxes/，如果在window系统中应该是放到了： C:\Users\当前用户名\.vagrant.d\boxes\目录下。
 
+通过vagrant box add这样的方式安装远程的box，可能很慢，所以建议大家先下载box到本地再执行这样的操作。
 
 初始化
 
@@ -43,10 +63,11 @@ vagrant init
 如果你添加的box名称不是base，那么需要在初始化的时候指定名称，例如
 
 vagrant init "CentOS 6.3 x86_64 minimal"
+初始化过程的信息：
 
-
-
-
+A `Vagrantfile` has been placed in this directory.
+You are now ready to `vagrant up` your first virtual environment!
+Please read the comments in the Vagrantfile as well as documentation on `vagrantup.com` for more information on using Vagrant.
 这样就会在当前目录生成一个	Vagrantfile的文件，里面有很多配置信息，后面我们会详细讲解每一项的含义，但是默认的配置就可以开箱即用。
 
 启动虚拟机
@@ -54,19 +75,65 @@ vagrant init "CentOS 6.3 x86_64 minimal"
 启动虚拟机的命令如下：
 
 vagrant up
+启动过程的信息:
 
-
-
-
-
+Bringing machine 'default' up with 'virtualbox' provider...
+[default] Importing base box 'base'...
+[default] Matching MAC address for NAT networking...
+[default] Setting the name of the VM...
+[default] Clearing any previously set forwarded ports...
+[default] Creating shared folders metadata...
+[default] Clearing any previously set network interfaces...
+[default] Preparing network interfaces based on configuration...
+[default] Forwarding ports...
+[default] -- 22 => 2222 (adapter 1)
+[default] Booting VM...
+[default] Waiting for VM to boot. This can take a few minutes.
+[default] VM booted and ready for use!
+[default] Mounting shared folders...
+[default] -- /vagrant
 连接到虚拟机
 
 上面已经启动了虚拟机，之后我们就可以通过ssh来连接到虚拟机了。比如在我的开发机中可以像这样来连接：
 
 vagrant ssh
+连接到虚拟机后的信息如下：
 
+Linux lucid64 2.6.32-38-server #83-Ubuntu SMP Wed Jan 4 11:26:59 UTC 2012 x86_64 GNU/Linux
+Ubuntu 10.04.4 LTS
 
+Welcome to the Ubuntu Server!
+ * Documentation:  http://www.ubuntu.com/server/doc
+New release 'precise' available.
+Run 'do-release-upgrade' to upgrade to it.
 
+Welcome to your Vagrant-built virtual machine.
+Last login: Fri Sep 14 07:31:39 2012 from 10.0.2.2
+这样我们就可以像连接到一台服务器一样进行操作了。
+
+window机器不支持这样的命令，必须使用第三方客户端来进行连接，例如putty、Xshell4等.
+putty为例：
+主机地址: 127.0.0.1
+端口: 2222
+用户名: vagrant
+密码: vagrant
+系统信息
+
+进入系统之后我们可以看一下系统的基础信息：
+
+vagrant@lucid64:/vagrant$ df -h
+Filesystem            Size  Used Avail Use% Mounted on
+/dev/mapper/lucid64-root
+                       78G  945M   73G   2% /
+none                  179M  176K  179M   1% /dev
+none                  184M     0  184M   0% /dev/shm
+none                  184M   64K  184M   1% /var/run
+none                  184M     0  184M   0% /var/lock
+none                  184M     0  184M   0% /lib/init/rw
+none                   78G  945M   73G   2% /var/lib/ureadahead/debugfs
+/dev/sda1             228M   17M  199M   8% /boot
+/vagrant              298G   76G  222G  26% /vagrant
+/vagrant这个目录是自动映射的，被映射到/Users/astaxie/vagrant，这样就方便我们以后在开发机中进行开发，在虚拟机中进行运行效果测试了。
 
 Vagrantfile配置文件详解
 
@@ -111,5 +178,10 @@ hostname的设置非常简单，Vagrantfile中加入下面这行就可以了：
 修改完Vagrantfile的配置后，记得要用vagrant reload命令来重启VM之后才能使用VM更新后的配置
 
 
+
+
+reprint from
+
+https://github.com/astaxie/go-best-practice/blob/master/ebook/zh/01.2.md
 
 
