@@ -25,3 +25,19 @@ sudo service nginx restart始终没有nginx进程
 sudo lsof -i:80 查看端口占用   发现php占用，不太合理，重启vagrant ，重启nginx，php正常了。
 
 安装教程中mysql源一直报错，后面重新找了源。
+
+
+vagrant内不需要绑定host，只需在win里面绑好host，而对于外网域名的，win里面也不需要绑host，只要配好nginx的server就可以访问
+laravel首页正常，其他页面404问题：
+http://d.laravel-china.org/docs/5.4/installation
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}
+因为本地是apache，有了htaccess文件，而nginx要加上面的配置
+
+nginx启动，sudo service nginx restart,启动不了查看nginx日志 /var/log/nginx/error.log,配置经常不会马上生效，重新加载vagrant即可，vagrant reload
+
+
+
+
+
