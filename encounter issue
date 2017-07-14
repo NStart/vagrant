@@ -39,5 +39,20 @@ nginx启动，sudo service nginx restart,启动不了查看nginx日志 /var/log/
 
 
 
+css、js无法及时加载问题：
+其实对于nginx来说，你只需要修改配置文件(nginx.conf)中的一行重启就能简单的解决这个问题：
+
+sendfile off;
+找到 nginx.conf ，把里面的 “sendfile on” 修改为 “sendfile off”。
+
+当然，如果你使用Apache也可能遇到类似的问题，那么同样也有类似的配置需要修改：
+
+EnableSendfile off
+
+
+
+
+
+
 
 
